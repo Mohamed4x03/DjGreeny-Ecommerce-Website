@@ -1,3 +1,4 @@
+from ctypes.wintypes import tagSIZE
 from distutils.command.upload import upload
 from email.charset import Charset
 from email.mime import image
@@ -14,6 +15,9 @@ from django.contrib.auth.models import User
 from pytz import timezone
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils.text import slugify
+from taggit.managers import TaggableManager
+
 
 
 # Create your models here.
@@ -26,11 +30,20 @@ FLAG_TYPE = [
 class Product(models.Model):
     name = models.CharField(_("Name"),max_length=100)
     sku = models.FloatField(_("SKU"))
-    brand = models.ForeignKey('Brand',verbose_name=("brand"),related_name='products_brand',on_delete=models.SET_NULL, null=TRUE, blank=TRUE )
+    brand = models.ForeignKey('Brand',verbose_name=("brand"),related_name='products_brand',on_delete=models.SET_NULL, null=True, blank=True )
     price = models.FloatField(_("price"),)
     desc = models.TextField(_("Desc"),max_length=1000)
     flag = models.CharField(max_length=10 , choices=FLAG_TYPE)
-    category=models.ForeignKey('category',verbose_name=("category"),related_name='products_category',on_delete=models.SET_NULL,null=TRUE,blank=TRUE)
+    category=models.ForeignKey('category',verbose_name=("category"),related_name='products_category',on_delete=models.SET_NULL,null=True,blank=True)
+    slug = models.SlugField(null=True , blank=True)
+    tags = TaggableManager(blank=True)
+    
+
+    
+    def save(self, *args , **kwargs):
+        self.slug=slugify(self.name)
+        super(Product,self).save(*args,**kwargs)
+
 
     def __str__(self):
         return self.name
@@ -44,7 +57,8 @@ class ProductImage(models.Model):
     
 class Brand(models.Model):
     name = models.CharField(_("Name"),max_length=50)    
-    
+    image = models.ImageField(_("Image"),upload_to='brand/',)
+
     def __str__(self):
         return self.name
 
@@ -57,8 +71,8 @@ class Category(models.Model):
     
     
 class Review(models.Model):
-    user = models.ForeignKey(User,verbose_name=_("User"), related_name='review_author', on_delete=models.SET_NULL, null=TRUE, blank=TRUE )
-    product = models.ForeignKey(Product, verbose_name=_("Product"), related_name='product_review', on_delete=models.SET_NULL, null=TRUE, blank=TRUE)
+    user = models.ForeignKey(User,verbose_name=_("User"), related_name='review_author', on_delete=models.SET_NULL, null=True, blank=True )
+    product = models.ForeignKey(Product, verbose_name=_("Product"), related_name='product_review', on_delete=models.CASCADE)
     review = models.TextField(_("Review"),max_length=1000)
     rate = models.FloatField(_("Rate"),validators=[ MaxValueValidator(5), MinValueValidator(0)])
     created_at = models.DateTimeField(_("Created_at"),default=timezone.now)
