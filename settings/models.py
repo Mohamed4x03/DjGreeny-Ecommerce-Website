@@ -10,6 +10,9 @@ class Country(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        verbose_name_plural='Countries'
+    
     
 class City(models.Model):
     country=models.ForeignKey(Country, related_name='country_city', on_delete=models.CASCADE)
@@ -18,3 +21,9 @@ class City(models.Model):
     
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural='Cities'
+    
+    
+    

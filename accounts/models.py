@@ -27,9 +27,6 @@ def create_profile(sender,instance,created,**kwargs):
         Profile.objects.create(user=instance)
         
     
-    
-
-
 DATA_TYPE=(
         ('Home','Home'),
         ('Office','Office'),
@@ -37,16 +34,16 @@ DATA_TYPE=(
         ('Academy','Academy'),
         ( 'Others','Others'),
     )
+        
     
-
 class UserPhoneNumber(models.Model):
     user=models.ForeignKey(User, related_name='user_phone', on_delete=models.CASCADE)
     phone_number=models.CharField(max_length=15)
     type=models.CharField(max_length=50, choices=DATA_TYPE)
 
-    def __str__(self):
-        return self.user.username
 
+    def __str__(self):
+        return f"{self.user.username}-{self.type}"
 
 
 class UserAddress(models.Model):
@@ -59,8 +56,7 @@ class UserAddress(models.Model):
     street=models.CharField(max_length=50)
     notes=models.TextField(max_length=300, null=True, blank=True)
     
-    
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username}-{self.type}"
     
     

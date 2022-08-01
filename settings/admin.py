@@ -6,6 +6,3 @@ from .models import Country, City
 admin.site.register(Country)
 admin.site.register(City)
 
-
-
-
