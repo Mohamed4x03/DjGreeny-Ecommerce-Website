@@ -1,4 +1,5 @@
 
+import imp
 from pickle import TRUE
 from pyexpat import model
 from xmlrpc.client import DateTime
@@ -10,12 +11,10 @@ from pytz import timezone
 from django.utils import timezone
 
 from products.models import  Product
+from utils.generate_code import generated_code
 
 # Create your models here.
 
-def generated_code(length=8):
-    numbers = '0123456789'
-    return ' '.join(random.choice(numbers) for _ in range(length))
 
 STATUS_CHOICES=(
     ('Received' , 'Received'),

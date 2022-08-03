@@ -1,6 +1,7 @@
 from ast import Pass
 from distutils.command.upload import upload
 from email.mime import image
+from email.policy import default
 import profile
 from pyexpat import model
 from tokenize import blank_re
@@ -9,13 +10,17 @@ from django.contrib.auth.models import User
 from settings.models import City, Country
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from utils.generate_code import generated_code
 # Create your models here.
 
 
 class Profile(models.Model):
     user=models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     image=models.ImageField(upload_to='profile/', null=True, blank=True)
+    code=models.CharField(max_length=50, default=generated_code)
+    code_used=models.BooleanField(default=False)
+    
+
 
     def __str__(self):
         return self.user.username
