@@ -146,4 +146,4 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER ='muhammed.hassaan49@gmail.com'
 EMAIL_HOST_PASSWORD = 'facuqlkswtaskwdi'
 
-DEFAULT_FROM_EMAIL = 'testmail@gmail.com'
+# DEFAULT_FROM_EMAIL = 'testmail@gmail.com'

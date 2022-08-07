@@ -8,10 +8,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-
 def signup(request):
     
-    if request.method == 'POST':
+    if request.method == 'POST': 
         form=SignupForm(request.POST)
         
         if form.is_valid():
@@ -25,10 +24,10 @@ def signup(request):
             print(profile.code)
             
             send_mail(
-                'Activate Your Account',
-                f"use this code {profile.code} to activate your account",
-                settings.EMAIL_HOST_USER,
-                [email,],
+                subject='Activate Your Account',
+                message=f"use this code {profile.code} to activate your account",
+                from_email='muhammed.hassaan94@gmail.com',
+                recipient_list=[email,],
                 fail_silently=False,
             )
             
