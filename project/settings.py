@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     
     "taggit",
     'django_summernote',
+    'debug_toolbar',
     
     'products',
     'order',
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -73,6 +75,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'settings.site_context_processor.get_site_info',
                 'accounts.user_context_processor.get_user',
+                'products.products_context_processor.get_brands',
                 
             ],
         },
@@ -154,3 +157,8 @@ EMAIL_HOST_PASSWORD = 'zmyomtgiyejevxcm'
 
 AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
  
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+] 
