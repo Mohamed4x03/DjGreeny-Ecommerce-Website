@@ -37,7 +37,7 @@ class Product(models.Model):
     category=models.ForeignKey('category',verbose_name=("category"),related_name='products_category',on_delete=models.SET_NULL,null=True,blank=True)
     slug = models.SlugField(null=True , blank=True)
     tags = TaggableManager(blank=True)
-    
+    image= models.ImageField(upload_to='Products/')
 
     
     def save(self, *args , **kwargs):
