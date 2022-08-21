@@ -3,11 +3,68 @@ from django.shortcuts import render
 from django.db.models import Count
 from django.views.generic import ListView , DetailView
 from .models import Brand, Category, Product, ProductImage, Review
+from django.db.models import Q , F
 # Create your views here.
+
+
+def product_list(request):
+    
+    #  queryset = Product.objects.filter(
+    #                                    Q(name__endswith='martin') |   # or
+    #                                    Q(price__gt=99)
+    #                                   )  
+    # queryset = Product.objects.filter(
+    #                                     Q(name__endswith='martin') &   # telda should be with (AND) or (OR)
+    #                                     ~Q(price__gt=99)  
+    #                                   )
+    # queryset = Product.objects.filter(
+    #                                     Q(name__endswith='martin') &   # AND
+    #                                     Q(price__gt=99)
+    #                                   )
+    
+    
+    # queryset = Product.objects.filter(id=F('category__id'))   # if category = id
+    # queryset = Product.objects.filter(id=F('category__id')).order_by('name')  #can apply two object in same time
+    
+    # queryset = Product.objects.order_by('name')   # order by what you need
+    # queryset = Product.objects.order_by('-name')  # order by reverse
+    # queryset = Product.objects.order_by('name', 'price')  #order by two field  
+    # queryset = Product.objects.order_by('name','-price')   
+    # queryset = Product.objects.order_by('name').reverse() # reverse everything
+    
+    # queryset = Product.objects.order_by('name')[0]        # use list to get 1st result
+    # queryset = Product.objects.order_by('name')[:5]       # 1st 5 only
+    # queryset = Product.objects.order_by('name')[10:20]    # from 10 to 20
+
+    # queryset = Product.objects.earliest('name')           # easy than list to get 1st result
+    # queryset = Product.objects.latest('name')            # easy than list to get last result
+    
+    # queryset = Product.objects.values('id','name')        # choose result of fields with dictionary
+    # queryset = Product.objects.values('id','name','category__name')        # 
+    # queryset = Product.objects.values_list('id','name','category__name')   # result in list
+    # queryset = Product.objects.values('id','name','category__name').distinct()    # to cancel repeated result
+    # queryset = Product.objects.only('id','name','category__name')    # get those only --in html if u call onther field that ll take long time to query for appear data
+    # queryset = Product.objects.only('id','name','category__name','price')   # here we called price and still in html the query ll back so fast
+    # queryset = Product.objects.defer('price')       # all field appear  except 'price'
+    # queryset = Product.objects.all()    # (not used) and in html you call {{product.category.price}} that take long time cuz of condition
+    # queryset = Product.objects.select_related('category').select_related('brand').all() # this useful in foreignkey relation (fast query)
+    #                                                                                     # prefetch_related use in many-to-many
+
+                                     
+     
+    return render(request, 'products/list.html', {'data':queryset})
+
+
+
+
+
+
+
+
 
 class ProductList(ListView):
     model = Product
-    paginate_by = 1
+    paginate_by = 50
     
     
     
