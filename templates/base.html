@@ -44,7 +44,11 @@
 
         <!-- CUSTOM -->
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/index.css' %} ">
+
+        {% block static %}
+            <link rel="stylesheet" href="{% static 'css/index.css' %} ">
+        {% endblock static %}            
+
         <!--=====================================
                     CSS LINK PART END
         =======================================-->
@@ -302,7 +306,7 @@
                                 <li class="navbar-item dropdown">
                                     <a class="navbar-link dropdown-arrow" href="#">Brands</a>
                                     <ul class="dropdown-position-list">
-                                        {% for brand in c_brands  %}
+                                        {% for brand in c_brands  %} 
 
                                             <li><a href="{% url 'products:brand_detail' brand.slug %}">{{brand}}</a></li>
 

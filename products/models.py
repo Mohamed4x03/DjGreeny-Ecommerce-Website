@@ -17,15 +17,32 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
-
-
-
+from django.urls import reverse
 # Create your models here.
 
 FLAG_TYPE = [
     ('new' , 'new'),
     ('feature' , 'feature'),
 ]
+
+
+class ProductQuerset(models.QuerySet):
+    def price_greater_than(self,price):
+        return self.filter(price__gt=price) 
+
+
+
+class ProductManager(models.Manager):
+    def get_queryset(self):
+        return ProductQuerset(self.model , using=self._db)
+    
+    
+    
+    def price_greater_than(self,price):
+        return self.get_queryset().price_greater_than(price)
+    
+
+
 
 class Product(models.Model):
     name = models.CharField(_("Name"),max_length=100)
@@ -39,6 +56,7 @@ class Product(models.Model):
     tags = TaggableManager(blank=True)
     image= models.ImageField(upload_to='Products/')
 
+    objects=ProductManager()
     
     def save(self, *args , **kwargs):
         self.slug=slugify(self.name)
@@ -47,6 +65,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
+    def get_absolute_url(self):
+        return reverse('products:product_detail', kwargs={"slug": self.slug})
+    
+    
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product,verbose_name=_("Product"),related_name='product_image',on_delete=models.CASCADE)    

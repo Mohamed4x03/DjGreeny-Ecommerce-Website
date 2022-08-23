@@ -3,7 +3,11 @@ from django.shortcuts import render
 from django.db.models import Count
 from django.views.generic import ListView , DetailView
 from .models import Brand, Category, Product, ProductImage, Review
-from django.db.models import Q , F
+from django.db.models import Q , F , Func , Value
+from django.db.models.aggregates import Count, Max, Min, Sum, Avg
+from django.db.models.functions import Concat
+from django.db.models import CharField
+
 # Create your views here.
 
 
@@ -49,12 +53,31 @@ def product_list(request):
     # queryset = Product.objects.all()    # (not used) and in html you call {{product.category.price}} that take long time cuz of condition
     # queryset = Product.objects.select_related('category').select_related('brand').all() # this useful in foreignkey relation (fast query)
     #                                                                                     # prefetch_related use in many-to-many
+    
+    
+    
+    # queryset = Product.objects.aggregate(myavg=Avg('price'),mysum=Sum('price'))    #result of avg or sum and more....
+      
+    # queryset = Product.objects.annotate(is_new=Value(True)) #
+    
+    # queryset = Product.objects.annotate(price_tax=F('price')* .8) 
+    
+    # queryset = Product.objects.annotate(                                           # make new field here not in database 
+    #            full_name=Concat('name','sku' , output_field=CharField())           # put this 2 fields side by side
+    # ) 
+    
+    
+    
+    queryset = Product.objects.price_greater_than(60)
 
-                                     
+    list(queryset)
+    
+    list(queryset)
+
+
+    print(queryset)
      
     return render(request, 'products/list.html', {'data':queryset})
-
-
 
 
 
