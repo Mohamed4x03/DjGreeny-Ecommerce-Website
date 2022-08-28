@@ -55,7 +55,8 @@ class Product(models.Model):
     slug = models.SlugField(null=True , blank=True)
     tags = TaggableManager(blank=True)
     image= models.ImageField(upload_to='Products/')
-
+    quantity = models.IntegerField(default=0)
+    
     objects=ProductManager()
     
     def save(self, *args , **kwargs):
